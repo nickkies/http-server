@@ -1,40 +1,54 @@
+use server::Server;
+use http::request::Request;
+
 fn main() {
     let server = Server::new("localhost:8080".to_string());
     server.run();
 }
 
-struct Server {
-    addr: String,
+mod server {
+    pub struct Server {
+        addr: String,
+    }
+
+    impl Server {
+        pub fn new(addr: String) -> Self {
+            Self {
+                addr
+            }
+        }
+
+        pub fn run(self) {
+            println!("Listening on {}", self.addr);
+        }
+    }
 }
 
-impl Server {
-    fn new(addr: String) -> Self {
-        Self {
-            addr
+mod http {
+    pub mod request {
+        use super::method::Method;
+
+        pub struct Request {
+            path: String,
+            query_string: Option<String>,
+            // method: super::method::Method,
+            method: Method,
         }
     }
 
-    fn run(self) {
-        println!("Listening on {}", self.addr);
+    mod method {
+        pub enum Method {
+            GET,
+            POST,
+            PUT,
+            DELETE,
+            HEAD,
+            CONNECT,
+            OPTIONS,
+            TRACE,
+            PATCH,
+        }
     }
-}
-
-struct Request {
-    path: String,
-    query_string: Option<String>,
-    method: Method,
-}
-
-enum Method {
-    GET,
-    POST,
-    PUT,
-    DELETE,
-    HEAD,
-    CONNECT,
-    OPTIONS,
-    TRACE,
-    PATCH,
 }
 
 /*
