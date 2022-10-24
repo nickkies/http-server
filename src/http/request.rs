@@ -15,9 +15,9 @@ impl TryFrom<&[u8]> for Request {
 
     // GET /search?name=nick&sort=1 HTTP/1.1
     fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
-        match str::from_utf8(buf) {
+        match str::from_utf8(buf).or(Err(ParseError::InvalidEncoding)) {
             Ok(request) => {},
-            Err(_) => return Err(ParseError::InvalidEncoding),
+            Err(e) => return Err(e),
         }
 
         unimplemented!()
